@@ -1,0 +1,55 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+# Files from Forge MDK
+forge*changelog.txt
+
+# Minecraft Run Folders
+run/
+runs/
+runData/
+run-data/
+run-data-*/
+run-client-*/
+run-client/
+run-clientalt-*/
+run-clientalt/
+run-server-*/
+run-server/
+
+run*/logs/
+run*/crash-reports/
+run*/screenshots/
+run*/debug/
+run*/usercache.json
+run*/usernamecache.json
+run*/options.txt
+run*/optionsof.txt
+run*/latest.log
+
+# Logs
+logs/
+*.log
+*.log.gz
+crash-reports/
+**/.cache/
