@@ -76,8 +76,8 @@ minecraft {
 }
 
 mixin {
-    add sourceSets.main, "ascendeddemon.refmap.json"
-    config "ascendeddemon.mixins.json"
+    add sourceSets.main, "descendedcore.refmap.json"
+    config "descendedcore.mixins.json"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
