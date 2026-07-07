@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "V": {
+      "item": "descendedcore:void_tear"
+    }
+  },
+  "pattern": [
+    "VVV",
+    "VVV",
+    "VVV"
+  ],
+  "result": {
+    "item": "descendedcore:compressed_void"
+  },
+  "show_notification": true
+}

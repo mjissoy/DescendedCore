@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "chance": 0.1,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "descendedcore:demon_heart"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "descendedcore:entities/imp"
+}

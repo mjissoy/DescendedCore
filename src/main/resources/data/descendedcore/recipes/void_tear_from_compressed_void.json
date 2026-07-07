@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "descendedcore:compressed_void"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "descendedcore:void_tear"
+  }
+}
