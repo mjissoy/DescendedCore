@@ -1,4 +1,4 @@
-package net.normlroyal.descendedcore.content.voidheart;
+package net.normlroyal.descendedcore.util;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
