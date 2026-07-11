@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "descendedcore.refmap.json",
   "mixins": [
+    "MixinLivingEntity"
   ],
   "client": [],
   "injectors": {

@@ -19,5 +19,7 @@
   "item.descendedcore.void_matrix": "Void Matrix",
   "item.descendedcore.void_skeleton_anomaly_spawn_egg": "Void Skeleton Anomaly Spawn Egg",
   "item.descendedcore.void_slime_anomaly_spawn_egg": "Void Slime Anomaly Spawn Egg",
-  "item.descendedcore.void_tear": "Void Droplet"
+  "item.descendedcore.void_tear": "Void Droplet",
+  "key.categories.descendedcore": "Descended Core",
+  "key.descendedcore.flight_boost": "Flight Boost"
 }

@@ -15,6 +15,7 @@ import net.normlroyal.descendedcore.content.block.CoreBlocks;
 import net.normlroyal.descendedcore.content.entity.CoreEntities;
 import net.normlroyal.descendedcore.content.item.CoreItems;
 import net.normlroyal.descendedcore.content.particle.CoreParticles;
+import net.normlroyal.descendedcore.network.CoreNetwork;
 import software.bernie.geckolib.GeckoLib;
 import org.slf4j.Logger;
 
@@ -33,6 +34,7 @@ public class DescendedCore
         CoreItems.register(modEventBus);
         CoreEntities.ENTITY_TYPES.register(modEventBus);
         CoreParticles.PARTICLES.register(modEventBus);
+        CoreNetwork.registerPackets();
         MinecraftForge.EVENT_BUS.register(this);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
