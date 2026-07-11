@@ -3,11 +3,13 @@ package net.normlroyal.descendedcore.compat;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.MissingMappingsEvent;
 import net.normlroyal.descendedcore.DescendedCore;
+import net.normlroyal.descendedcore.content.block.CoreBlocks;
 import net.normlroyal.descendedcore.content.entity.CoreEntities;
 import net.normlroyal.descendedcore.content.item.CoreItems;
 import net.normlroyal.descendedcore.content.particle.CoreParticles;
@@ -28,7 +30,25 @@ public final class DescendedCoreMissingMappings {
             Map.entry("imp_spawn_egg", CoreItems.IMP_SPAWN_EGG),
             Map.entry("void_anomaly_spawn_egg", CoreItems.VOID_ANOMALY_SPAWN_EGG),
             Map.entry("void_skeleton_anomaly_spawn_egg", CoreItems.VOID_SKELETON_ANOMALY_SPAWN_EGG),
-            Map.entry("void_slime_anomaly_spawn_egg", CoreItems.VOID_SLIME_ANOMALY_SPAWN_EGG)
+            Map.entry("void_slime_anomaly_spawn_egg", CoreItems.VOID_SLIME_ANOMALY_SPAWN_EGG),
+            Map.entry("void_cave_wall", () -> CoreBlocks.VOID_CAVE_WALL.get().asItem()),
+            Map.entry("void_wall_bricks", () -> CoreBlocks.VOID_WALL_BRICKS.get().asItem()),
+            Map.entry("smooth_void_wall", () -> CoreBlocks.SMOOTH_VOID_WALL.get().asItem()),
+            Map.entry("void_grass", () -> CoreBlocks.VOID_GRASS.get().asItem()),
+            Map.entry("void_vine", () -> CoreBlocks.VOID_VINE.get().asItem()),
+            Map.entry("void_pointed_dripstone", () -> CoreBlocks.VOID_POINTED_DRIPSTONE.get().asItem()),
+            Map.entry("void_poppy", () -> CoreBlocks.VOID_POPPY.get().asItem())
+    );
+
+    private static final Map<String, Supplier<? extends Block>> BLOCK_REMAPS = Map.ofEntries(
+            Map.entry("void_cave_wall", CoreBlocks.VOID_CAVE_WALL),
+            Map.entry("void_wall_bricks", CoreBlocks.VOID_WALL_BRICKS),
+            Map.entry("smooth_void_wall", CoreBlocks.SMOOTH_VOID_WALL),
+            Map.entry("void_grass", CoreBlocks.VOID_GRASS),
+            Map.entry("void_vine", CoreBlocks.VOID_VINE),
+            Map.entry("void_vine_plant", CoreBlocks.VOID_VINE_PLANT),
+            Map.entry("void_pointed_dripstone", CoreBlocks.VOID_POINTED_DRIPSTONE),
+            Map.entry("void_poppy", CoreBlocks.VOID_POPPY)
     );
 
     private static final Map<String, Supplier<? extends EntityType<?>>> ENTITY_REMAPS = Map.ofEntries(
@@ -48,22 +68,18 @@ public final class DescendedCoreMissingMappings {
 
     @SubscribeEvent
     public static void onMissingMappings(MissingMappingsEvent event) {
-        for (MissingMappingsEvent.Mapping<Item> mapping : event.getMappings(ForgeRegistries.Keys.ITEMS, OLD_MOD_ID)) {
-            Supplier<? extends Item> target = ITEM_REMAPS.get(mapping.getKey().getPath());
-            if (target != null) {
-                mapping.remap(target.get());
-            }
-        }
+        remap(event.getMappings(ForgeRegistries.Keys.ITEMS, OLD_MOD_ID), ITEM_REMAPS);
+        remap(event.getMappings(ForgeRegistries.Keys.BLOCKS, OLD_MOD_ID), BLOCK_REMAPS);
+        remap(event.getMappings(ForgeRegistries.Keys.ENTITY_TYPES, OLD_MOD_ID), ENTITY_REMAPS);
+        remap(event.getMappings(ForgeRegistries.Keys.PARTICLE_TYPES, OLD_MOD_ID), PARTICLE_REMAPS);
+    }
 
-        for (MissingMappingsEvent.Mapping<EntityType<?>> mapping : event.getMappings(ForgeRegistries.Keys.ENTITY_TYPES, OLD_MOD_ID)) {
-            Supplier<? extends EntityType<?>> target = ENTITY_REMAPS.get(mapping.getKey().getPath());
-            if (target != null) {
-                mapping.remap(target.get());
-            }
-        }
-
-        for (MissingMappingsEvent.Mapping<ParticleType<?>> mapping : event.getMappings(ForgeRegistries.Keys.PARTICLE_TYPES, OLD_MOD_ID)) {
-            Supplier<? extends ParticleType<?>> target = PARTICLE_REMAPS.get(mapping.getKey().getPath());
+    private static <T> void remap(
+            Iterable<MissingMappingsEvent.Mapping<T>> mappings,
+            Map<String, Supplier<? extends T>> targets
+    ) {
+        for (MissingMappingsEvent.Mapping<T> mapping : mappings) {
+            Supplier<? extends T> target = targets.get(mapping.getKey().getPath());
             if (target != null) {
                 mapping.remap(target.get());
             }

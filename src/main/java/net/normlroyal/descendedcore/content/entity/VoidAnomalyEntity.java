@@ -38,7 +38,7 @@ public class VoidAnomalyEntity extends Zombie implements VoidAnomaly {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return VoidAnomalyBehavior.canBeHurt(source) && super.hurt(source, amount);
+        return VoidAnomalyBehavior.canBeHurt(this, source, amount) && super.hurt(source, amount);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

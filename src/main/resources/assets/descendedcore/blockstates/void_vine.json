@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "growth_direction=down": {
+      "model": "descendedcore:block/void_vine",
+      "x": 180
+    },
+    "growth_direction=up": {
+      "model": "descendedcore:block/void_vine"
+    }
+  }
+}

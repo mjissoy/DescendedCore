@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "descendedcore:void_cave_wall",
+    "descendedcore:void_wall_bricks",
+    "descendedcore:smooth_void_wall"
+  ]
+}

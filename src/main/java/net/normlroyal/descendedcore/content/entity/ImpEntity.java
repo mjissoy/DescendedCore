@@ -25,6 +25,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.normlroyal.descendedcore.content.entity.imp.ImpDamageRules;
+import net.normlroyal.descendedcore.content.entity.imp.ImpTargetRules;
 
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -127,13 +128,16 @@ public class ImpEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
-        float base = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        float finalDmg = base;
-        finalDmg = ImpDamageRules.modifyDamage(this, target, finalDmg);
+    public boolean canAttack(LivingEntity target) {
+        return ImpTargetRules.canTarget(this, target) && super.canAttack(target);
+    }
 
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        float baseDamage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
         DamageSource source = this.damageSources().mobAttack(this);
-        return target.hurt(source, finalDmg);
+        float finalDamage = ImpDamageRules.modifyDamage(this, target, source, baseDamage);
+        return target.hurt(source, finalDamage);
     }
 
 

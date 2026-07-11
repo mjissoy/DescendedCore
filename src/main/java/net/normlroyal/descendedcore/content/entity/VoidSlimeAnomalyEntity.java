@@ -41,7 +41,7 @@ public class VoidSlimeAnomalyEntity extends Slime implements VoidAnomaly {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return VoidAnomalyBehavior.canBeHurt(source) && super.hurt(source, amount);
+        return VoidAnomalyBehavior.canBeHurt(this, source, amount) && super.hurt(source, amount);
     }
 
     @Override

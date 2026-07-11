@@ -16,8 +16,10 @@ public final class VoidAnomalyBehavior {
     private VoidAnomalyBehavior() {
     }
 
-    public static boolean canBeHurt(DamageSource source) {
-        return VoidAnomalyDamageRules.canBeHurt(source);
+    public static boolean canBeHurt(Mob anomaly, DamageSource source, float amount) {
+        return VoidAnomalyDamageRules.canBeHurt(
+                new VoidAnomalyDamageContext(anomaly, source, amount)
+        );
     }
 
     public static void spawnAmbientParticles(Mob mob, int count, float chance) {
