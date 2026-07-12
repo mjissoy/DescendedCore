@@ -1,4 +1,4 @@
-package net.normlroyal.descendedcore.content.void_touched;
+package net.normlroyal.descendedcore.void_touched;
 
 import net.minecraft.world.item.ItemStack;
 

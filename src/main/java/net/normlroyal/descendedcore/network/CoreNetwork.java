@@ -7,6 +7,9 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.normlroyal.descendedcore.DescendedCore;
+import net.normlroyal.descendedcore.action.network.packet.ActionCooldownS2CPacket;
+import net.normlroyal.descendedcore.action.network.packet.RequestActionCooldownC2SPacket;
+import net.normlroyal.descendedcore.action.network.packet.UseActionC2SPacket;
 import net.normlroyal.descendedcore.flight.network.packet.FlightActiveS2CPacket;
 import net.normlroyal.descendedcore.flight.network.packet.FlightInputC2SPacket;
 import net.normlroyal.descendedcore.flight.network.packet.StopFlightC2SPacket;
@@ -14,7 +17,7 @@ import net.normlroyal.descendedcore.flight.network.packet.ToggleFlightC2SPacket;
 import net.normlroyal.descendedcore.flight.network.packet.TryStartGlideC2SPacket;
 
 public final class CoreNetwork {
-    private static final String PROTOCOL = "1";
+    private static final String PROTOCOL = "2";
 
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
             new ResourceLocation(DescendedCore.MOD_ID, "main"),
@@ -63,6 +66,24 @@ public final class CoreNetwork {
                 .encoder(TryStartGlideC2SPacket::encode)
                 .decoder(TryStartGlideC2SPacket::decode)
                 .consumerMainThread(TryStartGlideC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(UseActionC2SPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(UseActionC2SPacket::encode)
+                .decoder(UseActionC2SPacket::decode)
+                .consumerMainThread(UseActionC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(RequestActionCooldownC2SPacket.class, nextId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(RequestActionCooldownC2SPacket::encode)
+                .decoder(RequestActionCooldownC2SPacket::decode)
+                .consumerMainThread(RequestActionCooldownC2SPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(ActionCooldownS2CPacket.class, nextId++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ActionCooldownS2CPacket::encode)
+                .decoder(ActionCooldownS2CPacket::decode)
+                .consumerMainThread(ActionCooldownS2CPacket::handle)
                 .add();
     }
 

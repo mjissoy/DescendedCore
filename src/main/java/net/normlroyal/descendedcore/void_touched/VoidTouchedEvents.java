@@ -1,4 +1,4 @@
-package net.normlroyal.descendedcore.content.void_touched;
+package net.normlroyal.descendedcore.void_touched;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
