@@ -3,20 +3,19 @@ package net.normlroyal.descendedcore.void_pocket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetExperiencePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.normlroyal.descendedcore.content.entity.CoreEntities;
 import net.normlroyal.descendedcore.content.entity.void_anomaly.VoidAnomaly;
 import net.normlroyal.descendedcore.content.item.CoreItems;
@@ -368,7 +367,7 @@ public final class VoidPocketManager {
             returnLevel = server.overworld();
         }
 
-        player.teleportTo(returnLevel, pocket.returnX, pocket.returnY, pocket.returnZ, pocket.returnYaw, pocket.returnPitch);
+        teleportPreservingExperience(player, returnLevel, pocket.returnX, pocket.returnY, pocket.returnZ, pocket.returnYaw, pocket.returnPitch);
         player.fallDistance = 0.0F;
         player.setHealth(Math.max(1.0F, player.getHealth()));
         player.displayClientMessage(message, true);
@@ -399,7 +398,7 @@ public final class VoidPocketManager {
         }
 
         BlockPos target = respawn != null ? respawn : targetLevel.getSharedSpawnPos();
-        player.teleportTo(targetLevel, target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D, player.getYRot(), player.getXRot());
+        teleportPreservingExperience(player, targetLevel, target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D, player.getYRot(), player.getXRot());
         player.fallDistance = 0.0F;
         player.setHealth(Math.max(1.0F, player.getHealth()));
         player.displayClientMessage(message, true);
@@ -407,7 +406,7 @@ public final class VoidPocketManager {
 
     private static void teleportToPocket(ServerPlayer player, ServerLevel voidLevel, VoidPocketData.Pocket pocket) {
         BlockPos entry = pocket.entryPos();
-        player.teleportTo(voidLevel, entry.getX() + 0.5D, entry.getY(), entry.getZ() + 0.5D, player.getYRot(), player.getXRot());
+        teleportPreservingExperience(player, voidLevel, entry.getX() + 0.5D, entry.getY(), entry.getZ() + 0.5D, player.getYRot(), player.getXRot());
         player.fallDistance = 0.0F;
     }
 
@@ -447,7 +446,9 @@ public final class VoidPocketManager {
         }
 
         BlockPos pos = spawnPos.get();
+
         anomaly.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, level.random.nextFloat() * 360.0F, 0.0F);
+        ForgeEventFactory.onFinalizeSpawn(anomaly, level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null, null);
         anomaly.setPersistenceRequired();
         level.addFreshEntity(anomaly);
     }
@@ -481,5 +482,31 @@ public final class VoidPocketManager {
             return CoreEntities.VOID_SKELETON_ANOMALY.get();
         }
         return CoreEntities.VOID_SLIME_ANOMALY.get();
+    }
+
+    private static void teleportPreservingExperience(
+            ServerPlayer player,
+            ServerLevel targetLevel,
+            double x,
+            double y,
+            double z,
+            float yaw,
+            float pitch
+    ) {
+        float experienceProgress = player.experienceProgress;
+        int experienceLevel = player.experienceLevel;
+        int totalExperience = player.totalExperience;
+
+        player.teleportTo(targetLevel, x, y, z, yaw, pitch);
+
+        player.experienceProgress = experienceProgress;
+        player.experienceLevel = experienceLevel;
+        player.totalExperience = totalExperience;
+
+        player.connection.send(new ClientboundSetExperiencePacket(
+                experienceProgress,
+                totalExperience,
+                experienceLevel
+        ));
     }
 }
