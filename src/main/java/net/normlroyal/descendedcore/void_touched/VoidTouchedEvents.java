@@ -25,6 +25,10 @@ public final class VoidTouchedEvents {
 
     @SubscribeEvent
     public static void onJoinLevel(EntityJoinLevelEvent event) {
+        if (event.loadedFromDisk()) {
+            return;
+        }
+
         if (!(event.getLevel() instanceof ServerLevel)) {
             return;
         }

@@ -19,6 +19,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.normlroyal.descendedcore.content.entity.CoreEntities;
 import net.normlroyal.descendedcore.content.entity.void_anomaly.VoidAnomaly;
 import net.normlroyal.descendedcore.content.item.CoreItems;
+import net.normlroyal.descendedcore.util.PlayerTeleportHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -367,7 +368,7 @@ public final class VoidPocketManager {
             returnLevel = server.overworld();
         }
 
-        teleportPreservingExperience(player, returnLevel, pocket.returnX, pocket.returnY, pocket.returnZ, pocket.returnYaw, pocket.returnPitch);
+        PlayerTeleportHelper.teleportPreservingExperience(player, returnLevel, pocket.returnX, pocket.returnY, pocket.returnZ, pocket.returnYaw, pocket.returnPitch);
         player.fallDistance = 0.0F;
         player.setHealth(Math.max(1.0F, player.getHealth()));
         player.displayClientMessage(message, true);
@@ -398,7 +399,7 @@ public final class VoidPocketManager {
         }
 
         BlockPos target = respawn != null ? respawn : targetLevel.getSharedSpawnPos();
-        teleportPreservingExperience(player, targetLevel, target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D, player.getYRot(), player.getXRot());
+        PlayerTeleportHelper.teleportPreservingExperience(player, targetLevel, target.getX() + 0.5D, target.getY() + 1.0D, target.getZ() + 0.5D, player.getYRot(), player.getXRot());
         player.fallDistance = 0.0F;
         player.setHealth(Math.max(1.0F, player.getHealth()));
         player.displayClientMessage(message, true);
@@ -406,7 +407,7 @@ public final class VoidPocketManager {
 
     private static void teleportToPocket(ServerPlayer player, ServerLevel voidLevel, VoidPocketData.Pocket pocket) {
         BlockPos entry = pocket.entryPos();
-        teleportPreservingExperience(player, voidLevel, entry.getX() + 0.5D, entry.getY(), entry.getZ() + 0.5D, player.getYRot(), player.getXRot());
+        PlayerTeleportHelper.teleportPreservingExperience(player, voidLevel, entry.getX() + 0.5D, entry.getY(), entry.getZ() + 0.5D, player.getYRot(), player.getXRot());
         player.fallDistance = 0.0F;
     }
 
@@ -482,31 +483,5 @@ public final class VoidPocketManager {
             return CoreEntities.VOID_SKELETON_ANOMALY.get();
         }
         return CoreEntities.VOID_SLIME_ANOMALY.get();
-    }
-
-    private static void teleportPreservingExperience(
-            ServerPlayer player,
-            ServerLevel targetLevel,
-            double x,
-            double y,
-            double z,
-            float yaw,
-            float pitch
-    ) {
-        float experienceProgress = player.experienceProgress;
-        int experienceLevel = player.experienceLevel;
-        int totalExperience = player.totalExperience;
-
-        player.teleportTo(targetLevel, x, y, z, yaw, pitch);
-
-        player.experienceProgress = experienceProgress;
-        player.experienceLevel = experienceLevel;
-        player.totalExperience = totalExperience;
-
-        player.connection.send(new ClientboundSetExperiencePacket(
-                experienceProgress,
-                totalExperience,
-                experienceLevel
-        ));
     }
 }
